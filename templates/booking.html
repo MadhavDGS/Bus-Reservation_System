@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-ticket-alt me-2"></i>Book Your Ticket
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="bus-details mb-4">
+                        <h5>
+                            <i class="fas fa-bus me-2"></i>Bus Details
+                        </h5>
+                        <p>
+                            <i class="fas fa-bus me-2"></i><strong>Bus Name:</strong> {{ bus.name }}<br>
+                            <i class="fas fa-route me-2"></i><strong>Route:</strong> {{ bus.from }} → {{ bus.to }}<br>
+                            <i class="fas fa-clock me-2"></i><strong>Departure:</strong> {{ bus.departure_time }}<br>
+                            <i class="fas fa-clock me-2"></i><strong>Arrival:</strong> {{ bus.arrival_time }}<br>
+                            <i class="fas fa-tag me-2"></i><strong>Price per seat:</strong> ₹{{ bus.price }}<br>
+                            <i class="fas fa-chair me-2"></i><strong>Available Seats:</strong> {{ bus.available_seats }}
+                        </p>
+                    </div>
+
+                    <form action="{{ url_for('book', bus_id=bus.id) }}" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-user me-2"></i>Full Name
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Email
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">
+                                <i class="fas fa-phone me-2"></i>Phone Number
+                            </label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="seats" class="form-label">
+                                <i class="fas fa-chair me-2"></i>Number of Seats
+                            </label>
+                            <input type="number" class="form-control" id="seats" name="seats" min="1" max="{{ bus.available_seats }}" required>
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>Maximum {{ bus.available_seats }} seats available
+                            </small>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-check-circle me-2"></i>Confirm Booking
+                            </button>
+                            <a href="{{ url_for('home') }}" class="btn btn-secondary btn-lg ms-2">
+                                <i class="fas fa-times-circle me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">
+        <i class="fas fa-search me-2"></i>Search Results
+    </h2>
+    <p class="text-muted mb-4">
+        <i class="fas fa-calendar-alt me-2"></i>Showing results for {{ date }}
+    </p>
+
+    {% if buses %}
+        <div class="row">
+            {% for bus in buses %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-bus me-2"></i>{{ bus.name }}
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt me-2"></i><strong>From:</strong> {{ bus.from }}<br>
+                                    <i class="fas fa-map-marker-alt me-2"></i><strong>To:</strong> {{ bus.to }}<br>
+                                    <i class="fas fa-clock me-2"></i><strong>Departure:</strong> {{ bus.departure_time }}<br>
+                                    <i class="fas fa-clock me-2"></i><strong>Arrival:</strong> {{ bus.arrival_time }}
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="card-text">
+                                    <i class="fas fa-tag me-2"></i><strong>Price:</strong> ₹{{ bus.price }}<br>
+                                    <i class="fas fa-chair me-2"></i><strong>Available Seats:</strong> {{ bus.available_seats }}<br>
+                                    <i class="fas fa-chair me-2"></i><strong>Total Seats:</strong> {{ bus.seats }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{{ url_for('book', bus_id=bus.id) }}" class="btn btn-primary">
+                                <i class="fas fa-ticket-alt me-2"></i>Book Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>No buses found for the selected route. Please try different cities or dates.
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">
+                <i class="fas fa-search me-2"></i>Search Again
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

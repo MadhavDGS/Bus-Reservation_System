@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-bus me-2"></i>{{ bus.name }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>
+                                <i class="fas fa-route me-2"></i>Route Details
+                            </h5>
+                            <p>
+                                <i class="fas fa-map-marker-alt me-2"></i><strong>From:</strong> {{ bus.from }}<br>
+                                <i class="fas fa-map-marker-alt me-2"></i><strong>To:</strong> {{ bus.to }}<br>
+                                <i class="fas fa-clock me-2"></i><strong>Departure:</strong> {{ bus.departure_time }}<br>
+                                <i class="fas fa-clock me-2"></i><strong>Arrival:</strong> {{ bus.arrival_time }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>
+                                <i class="fas fa-info-circle me-2"></i>Bus Information
+                            </h5>
+                            <p>
+                                <i class="fas fa-tag me-2"></i><strong>Type:</strong> {{ bus.type }}<br>
+                                <i class="fas fa-building me-2"></i><strong>Operator:</strong> {{ bus.operator }}<br>
+                                <i class="fas fa-chair me-2"></i><strong>Available Seats:</strong> {{ bus.available_seats }}<br>
+                                <i class="fas fa-tag me-2"></i><strong>Price:</strong> ₹{{ bus.price }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>
+                            <i class="fas fa-list me-2"></i>Amenities
+                        </h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for amenity in bus.amenities %}
+                            <span class="badge bg-primary">
+                                <i class="fas fa-check me-1"></i>{{ amenity }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>
+                                <i class="fas fa-map-marker-alt me-2"></i>Boarding Points
+                            </h5>
+                            <ul class="list-unstyled">
+                                {% for point in bus.boarding_points %}
+                                <li><i class="fas fa-circle-dot me-2"></i>{{ point }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>
+                                <i class="fas fa-map-marker-alt me-2"></i>Dropping Points
+                            </h5>
+                            <ul class="list-unstyled">
+                                {% for point in bus.dropping_points %}
+                                <li><i class="fas fa-circle-dot me-2"></i>{{ point }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="{{ url_for('book', bus_id=bus.id) }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-ticket-alt me-2"></i>Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Reviews
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Write a Review</h5>
+                        <form action="{{ url_for('add_review', bus_id=bus.id) }}" method="POST">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <select class="form-select" id="rating" name="rating" required>
+                                    <option value="5">5 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="1">1 Star</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Your Review</label>
+                                <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Review
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="reviews-list">
+                        {% for review in reviews %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">{{ review.name }}</h6>
+                                    <small class="text-muted">{{ review.date }}</small>
+                                </div>
+                                <div class="mb-2">
+                                    {% for i in range(review.rating) %}
+                                    <i class="fas fa-star text-warning"></i>
+                                    {% endfor %}
+                                    {% for i in range(5 - review.rating) %}
+                                    <i class="far fa-star text-warning"></i>
+                                    {% endfor %}
+                                </div>
+                                <p class="mb-0">{{ review.comment }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Bus Rating
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-4 mb-2">{{ "%.1f"|format(bus.rating) }}</div>
+                    <div class="mb-2">
+                        {% for i in range(5) %}
+                            {% if i < bus.rating|int %}
+                            <i class="fas fa-star text-warning"></i>
+                            {% elif i < bus.rating|round|int %}
+                            <i class="fas fa-star-half-alt text-warning"></i>
+                            {% else %}
+                            <i class="far fa-star text-warning"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="text-muted mb-0">{{ bus.reviews }} reviews</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Important Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-clock me-2"></i>Please arrive 30 minutes before departure
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-id-card me-2"></i>Carry valid ID proof
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-suitcase me-2"></i>Luggage limit: 15 kg per person
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-phone me-2"></i>Contact operator for any queries
+                        </li>
+                        <li>
+                            <i class="fas fa-exclamation-circle me-2"></i>Cancellation charges apply
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
