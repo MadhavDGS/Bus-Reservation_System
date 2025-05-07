@@ -1,4 +1,4 @@
-# Saketha Bus Reservation System
+# Saketh Bus Reservation System
 
 A simple bus reservation system built with Python and Flask. This system allows users to search for buses, book tickets, and view their bookings.
 
